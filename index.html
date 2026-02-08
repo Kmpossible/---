@@ -100,18 +100,7 @@
     to{ transform: translate(var(--dx),var(--dy)) scale(1.4); opacity:0; }
   }
 
-  /* If autoplay blocked */
-  #tapSound{
-    margin-top: 12px;
-    background:#111;
-    color:#fff;
-    font-size:14px;
-    padding:10px 14px;
-    border-radius:12px;
-    display:none;
-  }
-
-  /* Final GIF under the message */
+  /* Final photo under the message */
   .endGif{
     margin-top: 14px;
     width: min(320px, 85vw);
@@ -127,8 +116,6 @@
 <div class="card" id="card">
   <h1>Aljan, can you be my boyfriend? 💖</h1>
   <button id="yesBtn">YES</button>
-
-  <button id="tapSound">🎶 Allow music</button>
   <div class="tiny">Tip: The button is shy 😈</div>
 </div>
 
@@ -150,33 +137,22 @@
     setTimeout(()=>h.remove(),6500);
   },230);
 
-  // 🎵 Music: start ONLY when he tries to click YES
+  // 🎵 Music: start ONLY at the FINAL screen
   const bgm = document.getElementById("bgm");
-  const tapSound = document.getElementById("tapSound");
   let musicStarted = false;
-  let stopTimer = null;
 
   function startMusic20s(){
     if(musicStarted) return;
     musicStarted = true;
 
     bgm.currentTime = 0;
-    bgm.play().then(()=>{
-      stopTimer = setTimeout(()=>{
-        bgm.pause();
-        bgm.currentTime = 0;
-      }, 20000);
-    }).catch(()=>{
-      // If blocked, show tap button
-      tapSound.style.display = "inline-block";
-      musicStarted = false;
-    });
-  }
+    bgm.play().catch(()=>{});
 
-  tapSound.addEventListener("click", () => {
-    tapSound.style.display = "none";
-    startMusic20s();
-  });
+    setTimeout(()=>{
+      bgm.pause();
+      bgm.currentTime = 0;
+    }, 20000);
+  }
 
   // 💥 Heart burst
   function heartBurst(x,y){
@@ -206,20 +182,16 @@
     if(dodges>=4) showSure();
   }
 
-  // Start music on FIRST attempt to click/press YES
-  function tryStartMusic(){
-    startMusic20s();
-  }
-
-  yesBtn.addEventListener("pointerdown", tryStartMusic);
-
-  // Still dodge on hover/touch
+  // Still dodge on hover/touch (no preventDefault so audio won’t be blocked)
   yesBtn.addEventListener("mouseover", dodge);
-  yesBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); dodge(); });
+  yesBtn.addEventListener("touchstart", dodge);
 
-  // Once unlocked, clicking YES shows final message + GIF below text
+  // ✅ Final click: show message + start music
   yesBtn.addEventListener("click", (e)=>{
     if(!unlocked) return;
+
+    // start music ONLY here
+    startMusic20s();
 
     const x = e.clientX || (window.innerWidth/2);
     const y = e.clientY || (window.innerHeight/2);
