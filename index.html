@@ -6,262 +6,198 @@
 <title>Aljan 💖</title>
 
 <style>
-  body{
-    margin:0;
-    height:100vh;
-    overflow:hidden;
-    font-family: Arial, sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  font-family: Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background-image:url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzczZDdlczNlajk1NjE1ZGNiNnB5M3N4aWwycjZlODgzeHh2MTFrbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jVc9j9QXBUKkXi0nVn/giphy.gif");
+  background-size:cover;
+  background-position:center;
+}
 
-    /* Background stays as your cute couple GIF */
-    background-image: url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzczZDdlczNlajk1NjE1ZGNiNnB5M3N4aWwycjZlODgzeHh2MTFrbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jVc9j9QXBUKkXi0nVn/giphy.gif");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(255,182,193,0.65);
+  z-index:0;
+}
 
-  .overlay{
-    position:fixed;
-    inset:0;
-    background: rgba(255,182,193,0.65);
-    z-index:0;
-  }
+.card{
+  position:relative;
+  z-index:2;
+  width:min(440px,92vw);
+  padding:22px 16px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.9);
+  box-shadow:0 12px 40px rgba(0,0,0,.2);
+}
 
-  .card{
-    position:relative;
-    z-index:2;
-    width:min(440px, 92vw);
-    padding:22px 16px;
-    border-radius:20px;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-  }
+h1{font-size:26px;margin:10px 0;}
+p{margin:8px 0 0;}
 
-  h1{ font-size:26px; margin:10px 0; }
-  p{ opacity:.85; margin: 8px 0 0; }
+button{
+  border:none;
+  border-radius:14px;
+  padding:12px 22px;
+  font-size:18px;
+  cursor:pointer;
+}
 
-  button{
-    border:none;
-    border-radius:14px;
-    padding:12px 22px;
-    font-size:18px;
-    cursor:pointer;
-    user-select:none;
-  }
+#yesBtn{
+  background:#ff4d88;
+  color:#fff;
+  position:relative;
+}
 
-  #yesBtn{
-    background:#ff4d88;
-    color:#fff;
-    position:relative;
-  }
+.tiny{font-size:12px;opacity:.8;margin-top:10px;}
 
-  .tiny{ font-size:12px; opacity:.8; margin-top:10px; }
+.heart{
+  position:fixed;
+  bottom:-60px;
+  font-size:42px;
+  pointer-events:none;
+  animation:floatUp linear forwards;
+  z-index:1;
+}
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0;}
+}
 
-  /* Floating hearts */
-  .heart{
-    position:fixed;
-    bottom:-60px;
-    font-size:44px;
-    pointer-events:none;
-    animation: floatUp linear forwards;
-    z-index:1;
-  }
-  @keyframes floatUp{
-    to{ transform: translateY(-130vh) scale(1.5); opacity:0; }
-  }
+.confirmBox{
+  margin-top:14px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,230,240,.85);
+}
 
-  /* Confirm box */
-  .confirmBox{
-    margin-top:14px;
-    padding:12px;
-    border-radius:16px;
-    background: rgba(255,230,240,.82);
-  }
+.burst{
+  position:fixed;
+  font-size:26px;
+  pointer-events:none;
+  animation:burst 700ms forwards;
+  z-index:3;
+}
+@keyframes burst{
+  to{transform:translate(var(--dx),var(--dy)) scale(1.4);opacity:0;}
+}
 
-  /* Final pop */
-  .popIn{ animation: pop .6s ease-out; }
-  @keyframes pop{
-    from{ transform:scale(.7); opacity:0; }
-    to{ transform:scale(1); opacity:1; }
-  }
-
-  /* Heart burst */
-  .burst{
-    position:fixed;
-    font-size:26px;
-    pointer-events:none;
-    animation: burst 900ms forwards;
-    z-index:3;
-  }
-  @keyframes burst{
-    to{ transform: translate(var(--dx),var(--dy)) scale(1.4); opacity:0; }
-  }
-
-  /* If autoplay blocked */
-  #tapSound{
-    margin-top: 12px;
-    background:#111;
-    color:#fff;
-    font-size:14px;
-    padding:10px 14px;
-    border-radius:12px;
-    display:none;
-  }
-
-  /* Final GIF under the message */
-  .endGif{
-    margin-top: 14px;
-    width: min(320px, 85vw);
-    border-radius: 16px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-  }
+.endGif{
+  margin-top:14px;
+  width:min(300px,85vw);
+  border-radius:16px;
+}
 </style>
 </head>
 
 <body>
 <div class="overlay"></div>
 
+<!-- Preload FINAL GIF so it shows instantly -->
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMG9kZXF1N2swcDByMWtndXB4OHdrMzJ3MHcwOGYzenk3ODlybm85eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FLdmIp6wJr91JAI/giphy.gif"
+     style="display:none" />
+
 <div class="card" id="card">
   <h1>Aljan, can you be my boyfriend? 💖</h1>
   <button id="yesBtn">YES</button>
-
-  <button id="tapSound">🎶 Tap to allow music</button>
-  <div class="tiny">Tip: The button is shy 😈</div>
+  <div class="tiny">The button is shy 😈</div>
 </div>
 
-<!-- 🎵 Audio file in your repo (must be named music.mp3) -->
-<audio id="bgm" preload="auto">
+<audio id="bgm">
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  // 💕 Floating hearts
-  const hearts=["💖","💗","💞","💕","💘","❤️"];
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
-    h.style.left=Math.random()*100+"vw";
-    h.style.animationDuration=(3+Math.random()*3)+"s";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),6500);
-  },230);
+const hearts=["💖","💗","💞","💕","💘","❤️"];
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(3+Math.random()*3)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},260);
 
-  // 🎵 Music: start ONLY when he tries to click YES
-  const bgm = document.getElementById("bgm");
-  const tapSound = document.getElementById("tapSound");
-  let musicStarted = false;
-  let stopTimer = null;
+// 🎶 Music: start on first YES attempt
+const bgm=document.getElementById("bgm");
+let musicStarted=false;
 
-  function startMusic20s(){
-    if(musicStarted) return;
-    musicStarted = true;
+function startMusic(){
+  if(musicStarted) return;
+  musicStarted=true;
+  bgm.currentTime=0;
+  bgm.play().catch(()=>{});
+  setTimeout(()=>{
+    bgm.pause();
+    bgm.currentTime=0;
+  },20000);
+}
 
-    bgm.currentTime = 0;
-    bgm.play().then(()=>{
-      stopTimer = setTimeout(()=>{
-        bgm.pause();
-        bgm.currentTime = 0;
-      }, 20000);
-    }).catch(()=>{
-      // If blocked, show tap button
-      tapSound.style.display = "inline-block";
-      musicStarted = false;
-    });
+function heartBurst(x,y){
+  for(let i=0;i<14;i++){
+    const p=document.createElement("div");
+    p.className="burst";
+    p.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+    p.style.left=x+"px";
+    p.style.top=y+"px";
+    p.style.setProperty("--dx",(Math.random()*200-100)+"px");
+    p.style.setProperty("--dy",(Math.random()*200-100)+"px");
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),700);
   }
+}
 
-  tapSound.addEventListener("click", () => {
-    tapSound.style.display = "none";
-    startMusic20s();
+const yesBtn=document.getElementById("yesBtn");
+const card=document.getElementById("card");
+let dodges=0;
+let unlocked=false;
+
+function dodge(){
+  if(unlocked) return;
+  dodges++;
+  yesBtn.style.transform=`translate(${Math.random()*220-110}px,${Math.random()*130-65}px)`;
+  if(dodges>=3) showSure();
+}
+
+yesBtn.addEventListener("pointerdown", startMusic);
+yesBtn.addEventListener("mouseover", dodge);
+yesBtn.addEventListener("touchstart", e=>{e.preventDefault();dodge();});
+
+yesBtn.addEventListener("click", e=>{
+  if(!unlocked) return;
+  heartBurst(e.clientX||innerWidth/2,e.clientY||innerHeight/2);
+  card.innerHTML=`
+    <h1>I love you, Mister ko 💖🥰</h1>
+    <img class="endGif" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMG9kZXF1N2swcDByMWtndXB4OHdrMzJ3MHcwOGYzenk3ODlybm85eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FLdmIp6wJr91JAI/giphy.gif">
+    <p>Now you’re officially my boyfriend 😈💘</p>
+  `;
+});
+
+function showSure(){
+  if(document.getElementById("sureBox")) return;
+  const box=document.createElement("div");
+  box.className="confirmBox";
+  box.id="sureBox";
+  box.innerHTML=`
+    <h1 style="font-size:22px;">Are you sure? 😏</h1>
+    <label style="display:flex;gap:10px;justify-content:center;">
+      <input type="checkbox" id="sureCheck">
+      Yes, I’m sure 😌
+    </label>
+  `;
+  card.appendChild(box);
+
+  document.getElementById("sureCheck").addEventListener("change",e=>{
+    unlocked=e.target.checked;
+    yesBtn.textContent=unlocked?"YES ✅":"YES";
+    yesBtn.style.transform="translate(0,0)";
   });
-
-  // 💥 Heart burst
-  function heartBurst(x,y){
-    for(let i=0;i<18;i++){
-      const p=document.createElement("div");
-      p.className="burst";
-      p.textContent=hearts[Math.floor(Math.random()*hearts.length)];
-      p.style.left=x+"px";
-      p.style.top=y+"px";
-      p.style.setProperty("--dx",(Math.random()*240-120)+"px");
-      p.style.setProperty("--dy",(Math.random()*240-120)+"px");
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),900);
-    }
-  }
-
-  // 😈 Playful YES behavior
-  const yesBtn=document.getElementById("yesBtn");
-  const card=document.getElementById("card");
-  let dodges=0;
-  let unlocked=false;
-
-  function dodge(){
-    if(unlocked) return;
-    dodges++;
-    yesBtn.style.transform=`translate(${Math.random()*240-120}px,${Math.random()*140-70}px)`;
-    if(dodges>=4) showSure();
-  }
-
-  // Start music on FIRST attempt to click/press YES
-  function tryStartMusic(){
-    startMusic20s();
-  }
-
-  yesBtn.addEventListener("pointerdown", tryStartMusic);
-
-  // Still dodge on hover/touch
-  yesBtn.addEventListener("mouseover", dodge);
-  yesBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); dodge(); });
-
-  // Once unlocked, clicking YES shows final message + GIF below text
-  yesBtn.addEventListener("click", (e)=>{
-    if(!unlocked) return;
-
-    const x = e.clientX || (window.innerWidth/2);
-    const y = e.clientY || (window.innerHeight/2);
-    heartBurst(x,y);
-
-    card.innerHTML = `
-      <h1 class="popIn">I love you, Mister ko 💖🥰</h1>
-      <img class="endGif" alt="love gif"
-        src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMG9kZXF1N2swcDByMWtndXB4OHdrMzJ3MHcwOGYzenk3ODlybm85eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FLdmIp6wJr91JAI/giphy.gif">
-      <p class="popIn">Now you’re officially my boyfriend 😈💘</p>
-    `;
-  });
-
-  // “Are you sure?” unlocker
-  function showSure(){
-    if(document.getElementById("sureBox")) return;
-
-    const box=document.createElement("div");
-    box.className="confirmBox";
-    box.id="sureBox";
-    box.innerHTML=`
-      <h1 style="font-size:22px;margin:6px 0;">Are you sure? 😏</h1>
-      <label style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;">
-        <input type="checkbox" id="sureCheck" style="width:18px;height:18px;">
-        Yes, I’m sure 😌
-      </label>
-      <p class="tiny">Check it to unlock YES 😈</p>
-    `;
-    card.appendChild(box);
-
-    document.getElementById("sureCheck").addEventListener("change",(e)=>{
-      if(e.target.checked){
-        unlocked=true;
-        yesBtn.style.transform="translate(0,0)";
-        yesBtn.textContent="YES ✅";
-      }else{
-        unlocked=false;
-        yesBtn.textContent="YES";
-      }
-    });
-  }
+}
 </script>
-
 </body>
 </html>
