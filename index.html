@@ -109,6 +109,41 @@
       width:18px;
       height:18px;
     }
+
+    /* 🎶 Music button */
+    #musicBtn, #musicBtn2{
+      margin-top: 14px;
+      background: #111;
+      color: #fff;
+      font-size: 14px;
+      padding: 10px 16px;
+      border-radius: 12px;
+    }
+
+    /* ✅ Final pop animation */
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .popIn {
+      animation: popIn 0.6s ease-out;
+    }
+
+    /* 💥 Heart burst particles */
+    .burst {
+      position: fixed;
+      left: var(--x);
+      top: var(--y);
+      font-size: 26px;
+      pointer-events: none;
+      animation: burstFly 900ms ease-out forwards;
+      z-index: 3;
+    }
+    @keyframes burstFly {
+      from { transform: translate(0,0) scale(1); opacity: 1; }
+      to   { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity: 0; }
+    }
   </style>
 </head>
 
@@ -122,8 +157,14 @@
       <button id="yesBtn">YES</button>
     </div>
 
+    <button id="musicBtn">🎶 Tap to play music</button>
     <div class="tiny">Tip: The button is a bit shy 😈</div>
   </div>
+
+  <!-- 🎵 Put your audio file in the SAME repo and name it music.mp3 -->
+  <audio id="bgm" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     // 💖 Floating hearts
@@ -141,6 +182,49 @@
       setTimeout(() => h.remove(), dur*1000);
     }
     setInterval(spawnHeart, 230);
+
+    // 🎵 Music (phones require a tap)
+    const bgm = document.getElementById("bgm");
+    let playing = false;
+
+    function wireMusicButton(btnId){
+      const btn = document.getElementById(btnId);
+      if(!btn) return;
+
+      btn.addEventListener("click", async () => {
+        try{
+          if(!playing){
+            await bgm.play();
+            playing = true;
+            btn.textContent = "🔊 Music is playing";
+          }else{
+            bgm.pause();
+            playing = false;
+            btn.textContent = "🎶 Tap to play music";
+          }
+        }catch(e){
+          btn.textContent = "⚠️ Tap again to allow audio";
+        }
+      });
+    }
+
+    wireMusicButton("musicBtn");
+
+    // 💥 Heart burst animation
+    function heartBurst(x, y){
+      const particles = ["💖","💗","💕","💘","💞","❤️"];
+      for(let i=0; i<18; i++){
+        const p = document.createElement("div");
+        p.className = "burst";
+        p.textContent = particles[Math.floor(Math.random()*particles.length)];
+        p.style.setProperty("--x", x + "px");
+        p.style.setProperty("--y", y + "px");
+        p.style.setProperty("--dx", (Math.random()*240 - 120) + "px");
+        p.style.setProperty("--dy", (Math.random()*240 - 120) + "px");
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 950);
+      }
+    }
 
     // 😈 Playful: YES is "unclickable" first (dodges a few times)
     const yesBtn = document.getElementById("yesBtn");
@@ -162,12 +246,21 @@
     yesBtn.addEventListener("mouseover", dodge);
     yesBtn.addEventListener("touchstart", (e) => { e.preventDefault(); dodge(); });
 
-    yesBtn.addEventListener("click", () => {
+    yesBtn.addEventListener("click", (e) => {
       if(!unlocked) return;
+
+      const x = e.clientX || (window.innerWidth / 2);
+      const y = e.clientY || (window.innerHeight / 2);
+      heartBurst(x, y);
+
       card.innerHTML = `
-        <h1>I love you, Mister ko 💖🥰</h1>
-        <p>Now you’re officially my Boyfriend 😈💘</p>
+        <h1 class="popIn">I love you, Mister ko 💖🥰</h1>
+        <p class="popIn">Now you’re officially my Boyfriend 😈💘</p>
+        <button id="musicBtn2">🎶 Tap to play music</button>
+        <div class="tiny popIn">Screenshot this 😌</div>
       `;
+
+      wireMusicButton("musicBtn2");
     });
 
     function showAreYouSure(){
