@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aljan 💖</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      text-align: center;
+
+      /* Minions GIF background */
+      background-image: url("https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 230, 240, 0.7);
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255,255,255,0.85);
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+      width: min(420px, 90vw);
+    }
+
+    h1 { margin-bottom: 10px; }
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #ff4d88;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -60px;
+      font-size: 48px;
+      animation: floatUp linear forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    .confirm {
+      margin-top: 12px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="card" id="card">
+  <h1>Aljan, can you be my boyfriend? 💖</h1>
+  <button id="yesBtn">YES</button>
+</div>
+
+<script>
+  // Floating hearts
+  function heart() {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "💖";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }
+  setInterval(heart, 250);
+
+  // Playful YES button
+  const yesBtn = document.getElementById("yesBtn");
+  let tease = 0;
+
+  yesBtn.addEventListener("mouseover", () => {
+    if (tease < 3) {
+      yesBtn.style.transform =
+        `translate(${Math.random()*200-100}px, ${Math.random()*120-60}px)`;
+      tease++;
+    }
+  });
+
+  yesBtn.addEventListener("click", () => {
+    document.getElementById("card").innerHTML =
+      "<h1>Are you sure? 😏💘</h1><button onclick='finalYes()'>YES 💖</button>";
+  });
+
+  function finalYes() {
+    document.getElementById("card").innerHTML =
+      "<h1>I love you 😘💖</h1><p>Now you’re officially my boyfriend 😈</p>";
+  }
+</script>
+
+</body>
+</html>
